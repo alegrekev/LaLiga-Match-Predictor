@@ -44,21 +44,61 @@ class Schedule(db.Model):
     team2 = db.Column(db.String(100), nullable=False)
     location = db.Column(db.String(100), nullable=False)
     odds = db.Column(db.String(100), nullable=False)
+    team1_prob = db.Column(db.String(100), nullable=False)
+    team2_prob = db.Column(db.String(100), nullable=False)
+    draw_prob = db.Column(db.String(100), nullable=False)
 
 def update_schedule():
     schedule_df = get_schedule()
+    schedule_odds_df = get_schedule_odds(schedule_df)
     
-    # Delete existing records in the standings table
+    # Delete existing records in the schedule table
     Schedule.query.delete()
 
-    # Insert the new standings into the database
-    for _, row in schedule_df.iterrows():
+    # Insert the new schedule into the database
+    for _, row in schedule_odds_df.iterrows():
         schedule = Schedule(
             team1=row['Team 1'],
             team2=row['Team 2'],
             location=row['Location'],
             odds=row['ODDS BY'],
+            team1_prob=row['Team 1 Win Probability'],
+            team2_prob=row['Team 2 Win Probability'],
+            draw_prob=row['Draw Probability']
         )
         db.session.add(schedule)
+    
+    db.session.commit()
+
+class NextGame(db.Model):
+    __tablename__ = 'next_game'
+    id = db.Column(db.Integer, primary_key=True)
+    team1 = db.Column(db.String(100), nullable=False)
+    team2 = db.Column(db.String(100), nullable=False)
+    location = db.Column(db.String(100), nullable=False)
+    odds = db.Column(db.String(100), nullable=False)
+    team1_prob = db.Column(db.String(100), nullable=False)
+    team2_prob = db.Column(db.String(100), nullable=False)
+    draw_prob = db.Column(db.String(100), nullable=False)
+
+def update_next_game():
+    schedule_df = get_schedule()
+    next_game_df = get_next_game_odds(schedule_df)
+    
+    # Delete existing records in the schedule table
+    NextGame.query.delete()
+
+    # Insert the new schedule into the database
+    for _, row in next_game_df.iterrows():
+        next_game = NextGame(
+            team1=row['Team 1'],
+            team2=row['Team 2'],
+            location=row['Location'],
+            odds=row['ODDS BY'],
+            team1_prob=row['Team 1 Win Probability'],
+            team2_prob=row['Team 2 Win Probability'],
+            draw_prob=row['Draw Probability']
+        )
+        db.session.add(next_game)
     
     db.session.commit()

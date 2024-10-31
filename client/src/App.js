@@ -88,6 +88,9 @@ const Schedule = () => {
             <th>Team 2</th>
             <th>Location</th>
             <th>Online Betting Odds</th>
+            <th>Team 1 Win %</th>
+            <th>Team 2 Win %</th>
+            <th>Draw %</th>
           </tr>
         </thead>
         <tbody>
@@ -97,6 +100,63 @@ const Schedule = () => {
               <td>{match['Team 2']}</td>
               <td>{match['Location']}</td>
               <td>{match['ODDS BY']}</td>
+              <td>{match['Team 1 Win Probability']}</td>
+              <td>{match['Team 2 Win Probability']}</td>
+              <td>{match['Draw Probability']}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+const NextGame = () => {
+  const [nextGame, setNextGame] = useState([]);
+
+  useEffect(() => {
+    const fetchNextGame = async () => {
+      try {
+        const response = await fetch('/api/next_game');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        console.log('Fetched next game:', data);
+        setNextGame(data.next_game); // next_game is an array
+      } catch (error) {
+        console.error('Error fetching next game:', error);
+      }
+    };
+
+    fetchNextGame();
+  }, []);
+
+  return (
+    <div>
+      <h2>Next Match Prediction</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Team 1</th>
+            <th>Team 2</th>
+            <th>Location</th>
+            <th>Online Betting Odds</th>
+            <th>Team 1 Win %</th>
+            <th>Team 2 Win %</th>
+            <th>Draw %</th>
+          </tr>
+        </thead>
+        <tbody>
+          {nextGame.map((match, index) => (
+            <tr key={index}>
+              <td>{match['Team 1']}</td>
+              <td>{match['Team 2']}</td>
+              <td>{match['Location']}</td>
+              <td>{match['ODDS BY']}</td>
+              <td>{match['Team 1 Win Probability']}</td>
+              <td>{match['Team 2 Win Probability']}</td>
+              <td>{match['Draw Probability']}</td>
             </tr>
           ))}
         </tbody>
@@ -112,6 +172,7 @@ function App() {
         <img src="LaLiga.jpg" height="110px" width ="340px" />
         <h1>Match Predictor</h1>
       </div>
+      <NextGame />
       <Standings />
       <Schedule />
     </div>

@@ -27,6 +27,7 @@ table {
 
 th, td {
     border: 1px solid #ddd;
+    white-space:nowrap;
     text-align: center;
 }
 
@@ -44,6 +45,10 @@ td {
     padding: 2px;
 }
 
+img {
+    flex-shrink: 0; /* Prevent the image from shrinking */
+}
+
 #header {
     display: flex; /* Enable Flexbox layout */
     align-items: center; /* Vertically center the image and heading */
@@ -53,8 +58,4 @@ td {
     width: 100%;
     margin-bottom: 15px;
     background-color: #202124;
-}
-
-img {
-    flex-shrink: 0; /* Prevent the image from shrinking */
 }

@@ -3,7 +3,6 @@ from flask_cors import CORS
 
 from .extensions import api, db
 from .resources import ns
-#from .models import Standings
 
 def create_app():
     app = Flask(__name__)

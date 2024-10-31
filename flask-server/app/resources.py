@@ -38,8 +38,32 @@ class ScheduleResource(Resource):
                 "Team 1": s.team1,
                 "Team 2": s.team2,
                 "Location": s.location,
-                "ODDS BY": s.odds
+                "ODDS BY": s.odds,
+                "Team 1 Win Probability": s.team1_prob,
+                "Team 2 Win Probability": s.team2_prob,
+                "Draw Probability": s.draw_prob
             } for s in schedule
         ]
 
         return {"schedule": schedule_list}
+    
+@ns.route("/next_game")
+class nextgameResource(Resource):
+    def get(self):
+        update_next_game()
+        next_game = NextGame.query.all()
+
+        # Format the standings as a list of dictionaries
+        next_game_list = [
+            {
+                "Team 1": s.team1,
+                "Team 2": s.team2,
+                "Location": s.location,
+                "ODDS BY": s.odds,
+                "Team 1 Win Probability": s.team1_prob,
+                "Team 2 Win Probability": s.team2_prob,
+                "Draw Probability": s.draw_prob
+            } for s in next_game
+        ]
+
+        return {"next_game": next_game_list}
